@@ -4,7 +4,6 @@ class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
   static const route = "login_page";
 
-
   @override
   LogInScreenState createState() => LogInScreenState();
 }
@@ -20,9 +19,12 @@ class LogInScreenState extends State<LogInScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            SizedBox(
-              height: 200.0,
-              child: Image.asset('assets/images/iau_logo.png'),
+            Hero(
+              tag: "logo",
+              child: SizedBox(
+                height: 220.0,
+                child: Image.asset('assets/images/iau_logo.png'),
+              ),
             ),
             const SizedBox(
               height: 48.0,

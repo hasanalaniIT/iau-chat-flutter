@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:iau_chat/screens/login_page.dart';
+import 'package:iau_chat/screens/signup_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -20,20 +22,24 @@ class MainScreenState extends State<MainScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                SizedBox(
-                  height: 70.0,
-                  child: Image.asset('assets/images/iau_logo.png'),
-                ),
-                const Text(
-                  'IAU Chat',
-                  style: TextStyle(
-                    fontSize: 48.0,
-                    fontWeight: FontWeight.w800,
+            Hero(
+              tag: "logo",
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    height: 65.0,
+                    width: 85.0,
+                    child: Image.asset('assets/images/iau_logo.png'),
                   ),
-                ),
-              ],
+                  const Text(
+                    'IAU Chat',
+                    style: TextStyle(
+                      fontSize: 48.0,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 48.0,
@@ -46,7 +52,7 @@ class MainScreenState extends State<MainScreen> {
                 borderRadius: BorderRadius.circular(30.0),
                 child: MaterialButton(
                   onPressed: () {
-                    //Go to login screen.
+                    Navigator.pushNamed(context, LogInScreen.route);
                   },
                   minWidth: 200.0,
                   height: 42.0,
@@ -64,7 +70,8 @@ class MainScreenState extends State<MainScreen> {
                 elevation: 5.0,
                 child: MaterialButton(
                   onPressed: () {
-                    //Go to registration screen.
+                    Navigator.pushNamed(context, SignUpScreen.route);
+
                   },
                   minWidth: 200.0,
                   height: 42.0,
