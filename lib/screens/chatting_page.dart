@@ -3,6 +3,7 @@ import 'package:iau_chat/utils.dart';
 
 class ChattingScreen extends StatefulWidget {
   const ChattingScreen({super.key});
+  static const route = "chatting_page";
 
   @override
   ChattingScreenState createState() => ChattingScreenState();

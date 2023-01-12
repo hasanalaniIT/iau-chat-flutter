@@ -17,12 +17,12 @@ class MyChat extends StatelessWidget {
           bodyMedium: TextStyle(color: Colors.black54),
         ),
       ),
-      initialRoute: 'home_screen' ,
+      initialRoute: MainScreen.route ,
       routes: {
-        'home_screen': (context) => const MainScreen(),
-        'log_in_screen': (context) => LogInScreen(),
-        'sign_up_screen': (context) => SignUpScreen(),
-        'chatting_screen': (context) => ChattingScreen(),
+        MainScreen.route: (context) => const MainScreen(),
+        LogInScreen.route: (context) => const LogInScreen(),
+        SignUpScreen.route: (context) => const SignUpScreen(),
+        ChattingScreen.route: (context) => const ChattingScreen(),
       },
     );
   }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
+  static const route = "login_page";
+
 
   @override
   LogInScreenState createState() => LogInScreenState();
@@ -20,7 +22,7 @@ class LogInScreenState extends State<LogInScreen> {
           children: <Widget>[
             SizedBox(
               height: 200.0,
-              child: Image.asset('images/iau_logo.png'),
+              child: Image.asset('assets/images/iau_logo.png'),
             ),
             const SizedBox(
               height: 48.0,

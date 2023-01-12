@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
+  static const route = "signup_page";
 
   @override
   SignUpScreenState createState() => SignUpScreenState();
@@ -20,7 +21,7 @@ class SignUpScreenState extends State<SignUpScreen> {
           children: <Widget>[
             SizedBox(
               height: 200.0,
-              child: Image.asset('images/iau_logo.png'),
+              child: Image.asset('assets/images/iau_logo.png'),
             ),
             const SizedBox(
               height: 48.0,
