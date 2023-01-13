@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iau_chat/screens/login_page.dart';
 import 'package:iau_chat/screens/signup_page.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:iau_chat/helpers/main_button.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -43,14 +45,12 @@ class MainScreenState extends State<MainScreen> {
             const SizedBox(
               height: 48.0,
             ),
-            _buildButton(
-              context,
+            MainButton(
               text: 'Log In',
               onPressed: () => Navigator.pushNamed(context, LogInScreen.route),
               color: Colors.lightBlueAccent,
             ),
-            _buildButton(
-              context,
+            MainButton(
               text: 'Sign Up',
               onPressed: () => Navigator.pushNamed(context, SignUpScreen.route),
               color: Colors.blueAccent,
