@@ -12,35 +12,56 @@ class MainScreen extends StatefulWidget {
   MainScreenState createState() => MainScreenState();
 }
 
-class MainScreenState extends State<MainScreen> {
+class MainScreenState extends State<MainScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late Animation animation;
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    animation =
+        ColorTween(begin: Colors.blue, end: Colors.white).animate(controller);
+    controller.forward();
+    controller.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: animation.value,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Hero(
-              tag: "logo",
-              child: Row(
-                children: [
-                  SizedBox(
-                    height: 65.0,
-                    width: 85.0,
-                    child: Image.asset('assets/images/iau_logo.png'),
+            Row(
+              children: <Widget>[
+                Hero(
+                    tag: "logo",
+                    child: SizedBox(
+                      height: 65.0,
+                      width: 85.0,
+                      child: Image.asset('assets/images/iau_logo.png'),
+                    )),
+                WavyAnimatedTextKit(
+                  text: const ["IAU Chat"],
+                  textStyle: const TextStyle(
+                    fontSize: 44,
+                    fontWeight: FontWeight.w800,
                   ),
-                  const Text(
-                    'IAU Chat',
-                    style: TextStyle(
-                      fontSize: 48.0,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
+                )
+              ],
             ),
             const SizedBox(
               height: 48.0,
@@ -56,24 +77,6 @@ class MainScreenState extends State<MainScreen> {
               color: Colors.blueAccent,
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButton(BuildContext context,
-      {required String text, required VoidCallback onPressed, required Color color}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Material(
-        elevation: 5.0,
-        color: color,
-        borderRadius: BorderRadius.circular(30.0),
-        child: MaterialButton(
-          onPressed: onPressed,
-          minWidth: 200.0,
-          height: 42.0,
-          child: Text(text),
         ),
       ),
     );
