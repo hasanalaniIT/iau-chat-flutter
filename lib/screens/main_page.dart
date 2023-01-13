@@ -6,7 +6,6 @@ class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
   static const route = "home_page";
 
-
   @override
   MainScreenState createState() => MainScreenState();
 }
@@ -21,11 +20,11 @@ class MainScreenState extends State<MainScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
+          children: [
             Hero(
               tag: "logo",
               child: Row(
-                children: <Widget>[
+                children: [
                   SizedBox(
                     height: 65.0,
                     width: 85.0,
@@ -44,44 +43,37 @@ class MainScreenState extends State<MainScreen> {
             const SizedBox(
               height: 48.0,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, LogInScreen.route);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: const Text(
-                    'Log In',
-                  ),
-                ),
-              ),
+            _buildButton(
+              context,
+              text: 'Log In',
+              onPressed: () => Navigator.pushNamed(context, LogInScreen.route),
+              color: Colors.lightBlueAccent,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, SignUpScreen.route);
-
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: const Text(
-                    'Sign Up',
-                  ),
-                ),
-              ),
+            _buildButton(
+              context,
+              text: 'Sign Up',
+              onPressed: () => Navigator.pushNamed(context, SignUpScreen.route),
+              color: Colors.blueAccent,
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButton(BuildContext context,
+      {required String text, required VoidCallback onPressed, required Color color}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Material(
+        elevation: 5.0,
+        color: color,
+        borderRadius: BorderRadius.circular(30.0),
+        child: MaterialButton(
+          onPressed: onPressed,
+          minWidth: 200.0,
+          height: 42.0,
+          child: Text(text),
         ),
       ),
     );
