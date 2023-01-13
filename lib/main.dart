@@ -12,11 +12,6 @@ class MyChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: Colors.black54),
-        ),
-      ),
       initialRoute: MainScreen.route ,
       routes: {
         MainScreen.route: (context) => const MainScreen(),

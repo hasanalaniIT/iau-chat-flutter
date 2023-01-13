@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iau_chat/utils.dart';
+import 'package:iau_chat/helpers/style_utils.dart';
 
 class ChattingScreen extends StatefulWidget {
   const ChattingScreen({super.key});
