@@ -55,6 +55,29 @@ class ChattingScreenState extends State<ChattingScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            StreamBuilder <QuerySnapshot>(
+              stream: _fireStoreAuth.collection("conversations").snapshots(),
+              builder:(context, snapshot){
+                if (snapshot.hasData) {
+                  final conversations = snapshot.data!.docs;
+                  List<Text> conversationWidget = [];
+                  for (var text in conversations){
+                    final textMessage = text["sent_message"];
+                    final senderMail = text["user_mail"];
+                    final textWidget = Text("$textMessage from $senderMail");
+                    conversationWidget.add(textWidget);
+                  }
+                  return Column(
+                    children: conversationWidget,
+                  );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.blue,
+                  ),
+                );
+              },
+            ),
             Container(
               decoration: myMessageContainerDecoration,
               child: Row(
