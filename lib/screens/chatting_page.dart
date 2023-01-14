@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:iau_chat/helpers/style_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChattingScreen extends StatefulWidget {
@@ -41,19 +41,19 @@ class ChattingScreenState extends State<ChattingScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-              icon: const Icon(Icons.close),
+              icon: const Icon(Icons.logout),
               onPressed: () {
                 _fireBaseAuth.signOut();
                 Navigator.pop(context);
               }),
         ],
         title: const Text('Chat'),
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.blueAccent,
       ),
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             StreamBuilder <QuerySnapshot>(
               stream: _fireStoreAuth.collection("conversations").snapshots(),

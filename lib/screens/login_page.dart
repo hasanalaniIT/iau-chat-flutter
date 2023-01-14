@@ -16,8 +16,8 @@ class LogInScreen extends StatefulWidget {
 
 class LogInScreenState extends State<LogInScreen> {
   final _fireBaseAuth = FirebaseAuth.instance;
-  late String userEmail;
-  late String userPassword;
+  String userEmail = "";
+  String userPassword = "";
   bool loadingCircle = false;
   @override
   Widget build(BuildContext context) {
@@ -66,11 +66,11 @@ class LogInScreenState extends State<LogInScreen> {
               MainButton(
                 text: 'Log In',
                 onPressed: () async {
+                  print(userPassword);
+                  print(userEmail);
                   setState(() {
                     loadingCircle = true;
                   });
-                  print(userPassword);
-                  print(userEmail);
                   try {
                     final logUser =
                         await _fireBaseAuth.signInWithEmailAndPassword(
@@ -86,7 +86,7 @@ class LogInScreenState extends State<LogInScreen> {
                     });
                   }
                 },
-                color: Colors.blue,
+                color: Colors.indigoAccent,
               )
             ],
           ),

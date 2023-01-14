@@ -22,7 +22,7 @@ class MainScreenState extends State<MainScreen>
     controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     animation =
-        ColorTween(begin: Colors.blue, end: Colors.white).animate(controller);
+        ColorTween(begin: Colors.blue[700], end: Colors.white).animate(controller);
     controller.forward();
     controller.addListener(() {
       setState(() {});
@@ -69,12 +69,12 @@ class MainScreenState extends State<MainScreen>
             MainButton(
               text: 'Log In',
               onPressed: () => Navigator.pushNamed(context, LogInScreen.route),
-              color: Colors.lightBlueAccent,
+              color: Colors.indigo,
             ),
             MainButton(
               text: 'Sign Up',
               onPressed: () => Navigator.pushNamed(context, SignUpScreen.route),
-              color: Colors.blueAccent,
+              color: Colors.blue,
             ),
           ],
         ),

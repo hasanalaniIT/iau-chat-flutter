@@ -15,8 +15,8 @@ class SignUpScreen extends StatefulWidget {
 
 class SignUpScreenState extends State<SignUpScreen> {
   final _fireBaseAuth = FirebaseAuth.instance;
-  late String userEmail;
-  late String userPassword;
+  String userEmail = "";
+  String userPassword = "";
   bool loadingCircle = false;
   @override
   Widget build(BuildContext context) {
@@ -85,7 +85,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                     });
                   }
                 },
-                color: Colors.blue,
+                color: Colors.indigoAccent,
               )
             ],
           ),
