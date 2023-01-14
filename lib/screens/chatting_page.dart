@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iau_chat/helpers/style_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ChattingScreen extends StatefulWidget {
   const ChattingScreen({super.key});
@@ -10,6 +11,25 @@ class ChattingScreen extends StatefulWidget {
 }
 
 class ChattingScreenState extends State<ChattingScreen> {
+  final _fireBaseAuth = FirebaseAuth.instance;
+  late User userLogIn;
+
+  @override
+  void initState() {
+    getUser();
+    super.initState();
+  }
+  void getUser() async {
+    try {
+      final currUser =  _fireBaseAuth.currentUser;
+      if (currUser != null){
+        userLogIn = currUser;
+        print(userLogIn.email);
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

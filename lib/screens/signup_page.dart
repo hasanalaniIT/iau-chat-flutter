@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iau_chat/helpers/main_button.dart';
 import 'package:iau_chat/helpers/style_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:iau_chat/screens/chatting_page.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -11,6 +13,9 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class SignUpScreenState extends State<SignUpScreen> {
+  final _fireBaseAuth = FirebaseAuth.instance;
+  late String userEmail;
+  late String userPassword;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,26 +37,43 @@ class SignUpScreenState extends State<SignUpScreen> {
               height: 48.0,
             ),
             TextField(
-              onChanged: (value) {
-                //Do something with the user input.
-              },
-              decoration: myTextFieldDecoration.copyWith(hintText: "Enter your Email")
-      ),
+                keyboardType: TextInputType.emailAddress,
+                textAlign: TextAlign.center,
+                onChanged: (information) {
+                  userEmail = information;
+                },
+                decoration: myTextFieldDecoration.copyWith(
+                    hintText: "Enter your Email")),
             const SizedBox(
-              height: 8.0,
+              height: 9.0,
             ),
             TextField(
-              onChanged: (value) {
-                //Do something with the user input.
-              },
-              decoration: myTextFieldDecoration.copyWith(hintText: "Enter your password")
-            ),
+                obscureText: true,
+                textAlign: TextAlign.center,
+                onChanged: (information) {
+                  userPassword = information;
+                },
+                decoration: myTextFieldDecoration.copyWith(
+                    hintText: "Enter your password")),
             const SizedBox(
               height: 24.0,
             ),
             MainButton(
               text: 'Register',
-              onPressed: () {},
+              onPressed: () async {
+                print(userPassword);
+                print(userEmail);
+                try {
+                  final newRegister =
+                      await _fireBaseAuth.createUserWithEmailAndPassword(
+                          email: userEmail, password: userPassword);
+                  if (newRegister != null) {
+                    Navigator.pushNamed(context, ChattingScreen.route);
+                  }
+                } on Exception catch (e) {
+                  print(e);
+                }
+              },
               color: Colors.blue,
             )
           ],
