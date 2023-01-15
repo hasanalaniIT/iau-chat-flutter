@@ -14,6 +14,7 @@ class ChattingScreen extends StatefulWidget {
 class ChattingScreenState extends State<ChattingScreen> {
   final _fireBaseAuth = FirebaseAuth.instance;
   final _fireStoreAuth = FirebaseFirestore.instance;
+  final textFieldController = TextEditingController();
   late User userLogIn;
   late String textMessage;
   @override
@@ -63,6 +64,7 @@ class ChattingScreenState extends State<ChattingScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      controller: textFieldController,
                       onChanged: (text) {
                         textMessage = text;
                       },
@@ -71,6 +73,7 @@ class ChattingScreenState extends State<ChattingScreen> {
                   ),
                   TextButton(
                     onPressed: () {
+                      textFieldController.clear();
                       _fireStoreAuth.collection('conversations').add({
                         "sent_message": textMessage,
                         "user_mail": userLogIn.email,
