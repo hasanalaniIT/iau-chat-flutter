@@ -177,6 +177,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  loading_overlay:
+    dependency: "direct main"
+    description:
+      name: loading_overlay
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   matcher:
     dependency: transitive
     description:
@@ -198,13 +205,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
-  modal_progress_hud:
-    dependency: "direct main"
-    description:
-      name: modal_progress_hud
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.3"
   path:
     dependency: transitive
     description:

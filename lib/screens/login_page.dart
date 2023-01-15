@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iau_chat/helpers/main_button.dart';
 import 'package:iau_chat/helpers/style_utils.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 
 import '../helpers/footnote.dart';
 import 'chatting_page.dart';
@@ -24,8 +24,8 @@ class LogInScreenState extends State<LogInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ModalProgressHUD(
-        inAsyncCall: loadingCircle,
+      body: LoadingOverlay(
+        isLoading: loadingCircle,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
