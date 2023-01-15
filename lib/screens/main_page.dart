@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../helpers/footnote.dart';
 import 'package:iau_chat/screens/login_page.dart';
 import 'package:iau_chat/screens/signup_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -21,8 +22,8 @@ class MainScreenState extends State<MainScreen>
     super.initState();
     controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    animation =
-        ColorTween(begin: Colors.blue[700], end: Colors.white).animate(controller);
+    animation = ColorTween(begin: Colors.blue[700], end: Colors.white)
+        .animate(controller);
     controller.forward();
     controller.addListener(() {
       setState(() {});
@@ -79,6 +80,7 @@ class MainScreenState extends State<MainScreen>
           ],
         ),
       ),
+      bottomNavigationBar: const MyFootNote(),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:iau_chat/helpers/main_button.dart';
 import 'package:iau_chat/helpers/style_utils.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
+import '../helpers/footnote.dart';
 import 'chatting_page.dart';
 
 class LogInScreen extends StatefulWidget {
@@ -94,6 +95,7 @@ class LogInScreenState extends State<LogInScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: const MyFootNote(),
     );
   }
 }

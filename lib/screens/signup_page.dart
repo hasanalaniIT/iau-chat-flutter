@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:iau_chat/screens/chatting_page.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
+import '../helpers/footnote.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
   static const route = "signup_page";
@@ -93,6 +95,7 @@ class SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: const MyFootNote(),
     );
   }
 }
