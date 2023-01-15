@@ -55,29 +55,7 @@ class ChattingScreenState extends State<ChattingScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            StreamBuilder <QuerySnapshot>(
-              stream: _fireStoreAuth.collection("conversations").snapshots(),
-              builder:(context, snapshot){
-                if (snapshot.hasData) {
-                  final conversations = snapshot.data!.docs;
-                  List<Text> conversationWidget = [];
-                  for (var text in conversations){
-                    final textMessage = text["sent_message"];
-                    final senderMail = text["user_mail"];
-                    final textWidget = Text("$textMessage from $senderMail");
-                    conversationWidget.add(textWidget);
-                  }
-                  return Column(
-                    children: conversationWidget,
-                  );
-                }
-                return const Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.blue,
-                  ),
-                );
-              },
-            ),
+            StreamMessagesBuilder(fireStoreAuth: _fireStoreAuth),
             Container(
               decoration: myMessageContainerDecoration,
               child: Row(
@@ -109,6 +87,79 @@ class ChattingScreenState extends State<ChattingScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class BubbleTextBuilder extends StatelessWidget {
+  final String email;
+  final String message;
+  const BubbleTextBuilder({required this.message, required this.email});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            email,
+            style: const TextStyle(fontSize: 13, color: Colors.black45),
+          ),
+          Material(
+            elevation: 5.0,
+            borderRadius: BorderRadius.circular(32),
+            color: Colors.indigoAccent,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Text(
+                message,
+                style: const TextStyle(fontSize: 16.0, color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StreamMessagesBuilder extends StatelessWidget {
+  const StreamMessagesBuilder({
+    Key? key,
+    required FirebaseFirestore fireStoreAuth,
+  })  : _fireStoreAuth = fireStoreAuth,
+        super(key: key);
+
+  final FirebaseFirestore _fireStoreAuth;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _fireStoreAuth.collection("conversations").snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final conversations = snapshot.data!.docs;
+          List<BubbleTextBuilder> conversationWidget = [];
+          for (var text in conversations) {
+            final textMessage = text["sent_message"];
+            final senderMail = text["user_mail"];
+            final bubbleTextWidget =
+                BubbleTextBuilder(email: senderMail, message: textMessage);
+            conversationWidget.add(bubbleTextWidget);
+          }
+          return Expanded(
+              child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            children: conversationWidget,
+          ));
+        }
+        return const Center(
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.blue,
+          ),
+        );
+      },
     );
   }
 }
