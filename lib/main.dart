@@ -17,6 +17,7 @@ class MyChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: MainScreen.route ,
       routes: {
         MainScreen.route: (context) => const MainScreen(),
