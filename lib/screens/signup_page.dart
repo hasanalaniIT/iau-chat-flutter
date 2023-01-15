@@ -30,11 +30,13 @@ class SignUpScreenState extends State<SignUpScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Hero(
-                tag: "logo",
-                child: SizedBox(
-                  height: 220.0,
-                  child: Image.asset('assets/images/iau_logo.png'),
+              Flexible(
+                child: Hero(
+                  tag: "logo",
+                  child: SizedBox(
+                    height: 220.0,
+                    child: Image.asset('assets/images/iau_logo.png'),
+                  ),
                 ),
               ),
               const SizedBox(
