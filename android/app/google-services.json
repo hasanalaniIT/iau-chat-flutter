@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "885048384405",
+    "project_id": "iau-chat",
+    "storage_bucket": "iau-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885048384405:android:0ddc507dedf6996107f49c",
+        "android_client_info": {
+          "package_name": "com.hasanalani.iau_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "885048384405-vv7m12tir4ku8enlj4c20bud1ife4sl1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0GNFm4uNBdpALy7EfloTrRcWZJqTxy-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "885048384405-vv7m12tir4ku8enlj4c20bud1ife4sl1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
