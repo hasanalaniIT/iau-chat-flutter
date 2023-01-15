@@ -5,6 +5,9 @@ const mySendButtonTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
   fontSize: 18.0,
 );
+const myBubbleMessageRadiusDecoration = BorderRadius.only(
+    bottomRight: Radius.circular(28),
+    bottomLeft: Radius.circular(28));
 
 const myMessageTextFieldDecoration = InputDecoration(
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
