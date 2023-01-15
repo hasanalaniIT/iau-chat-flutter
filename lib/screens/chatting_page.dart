@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+late User userLogIn;
+
 class ChattingScreen extends StatefulWidget {
   const ChattingScreen({super.key});
   static const route = "chatting_page";
@@ -15,7 +17,6 @@ class ChattingScreenState extends State<ChattingScreen> {
   final _fireBaseAuth = FirebaseAuth.instance;
   final _fireStoreAuth = FirebaseFirestore.instance;
   final textFieldController = TextEditingController();
-  late User userLogIn;
   late String textMessage;
   @override
   void initState() {
@@ -96,28 +97,37 @@ class ChattingScreenState extends State<ChattingScreen> {
 
 class BubbleTextBuilder extends StatelessWidget {
   final String email;
+  final bool isSelfSender;
   final String message;
-  const BubbleTextBuilder({required this.message, required this.email});
+  const BubbleTextBuilder(
+      {required this.message, required this.email, required this.isSelfSender});
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment:
+            isSelfSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Text(
             email,
             style: const TextStyle(fontSize: 13, color: Colors.black45),
           ),
           Material(
-            elevation: 5.0,
-            borderRadius: BorderRadius.circular(32),
-            color: Colors.indigoAccent,
+            elevation: 6.0,
+            borderRadius: isSelfSender
+                ? myBubbleMessageRadiusDecoration.copyWith(
+                    topLeft: const Radius.circular(28))
+                : myBubbleMessageRadiusDecoration.copyWith(
+                    topRight: const Radius.circular(28)),
+            color: isSelfSender ? Colors.indigoAccent : Colors.white,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
                 message,
-                style: const TextStyle(fontSize: 16.0, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 16.0,
+                    color: isSelfSender ? Colors.white : Colors.black),
               ),
             ),
           ),
@@ -142,13 +152,16 @@ class StreamMessagesBuilder extends StatelessWidget {
       stream: _fireStoreAuth.collection("conversations").snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final conversations = snapshot.data!.docs;
+          final conversations = snapshot.data!.docs.reversed;
           List<BubbleTextBuilder> conversationWidget = [];
           for (var text in conversations) {
             final textMessage = text["sent_message"];
             final senderMail = text["user_mail"];
-            final bubbleTextWidget =
-                BubbleTextBuilder(email: senderMail, message: textMessage);
+            final loggedInCurrentUser = userLogIn.email;
+            final bubbleTextWidget = BubbleTextBuilder(
+                isSelfSender: loggedInCurrentUser == senderMail,
+                email: senderMail,
+                message: textMessage);
             conversationWidget.add(bubbleTextWidget);
           }
           return Expanded(
