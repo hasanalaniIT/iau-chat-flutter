@@ -6,7 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 late User userLogIn;
 
 class ChattingScreen extends StatefulWidget {
-  const ChattingScreen({super.key});
+  final String selectedFriendEmail;
+  const ChattingScreen({super.key, required this.selectedFriendEmail});
   static const route = "chatting_page";
 
   @override
@@ -36,6 +37,34 @@ class ChattingScreenState extends State<ChattingScreen> {
     }
   }
 
+
+  void createConversation(String friendEmail) async {
+    final currUser = _fireBaseAuth.currentUser;
+    if (currUser != null) {
+      final userDoc = await _fireStoreAuth
+          .collection('users')
+          .doc(currUser.uid)
+          .get();
+      print(userDoc.id);
+      print("userDoc");
+      if (userDoc.exists) {
+        final conversation = userDoc.reference.collection('conversations').doc();
+        conversation.set({
+          "friend_email": friendEmail,
+          "timestamp": Timestamp.now(),
+        });
+        conversation.collection('messages').add({
+          "message": textMessage,
+          "msg_date": Timestamp.now(),
+          "sender": currUser.email,
+        });
+      } else {
+        print('User document does not exist');
+      }
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +86,9 @@ class ChattingScreenState extends State<ChattingScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            StreamMessagesBuilder(fireStoreAuth: _fireStoreAuth),
+            StreamMessagesBuilder(
+                fireStoreAuth: _fireStoreAuth,
+                friendEmail: widget.selectedFriendEmail),
             Container(
               decoration: myMessageContainerDecoration,
               child: Row(
@@ -75,10 +106,7 @@ class ChattingScreenState extends State<ChattingScreen> {
                   TextButton(
                     onPressed: () {
                       textFieldController.clear();
-                      _fireStoreAuth.collection('conversations').add({
-                        "sent_message": textMessage,
-                        "user_mail": userLogIn.email,
-                      });
+                      createConversation(widget.selectedFriendEmail);
                     },
                     child: const Text(
                       'Send',
@@ -92,6 +120,57 @@ class ChattingScreenState extends State<ChattingScreen> {
         ),
       ),
     );
+  }
+}
+
+class StreamMessagesBuilder extends StatelessWidget {
+  final FirebaseFirestore fireStoreAuth;
+  final String friendEmail;
+
+  const StreamMessagesBuilder({
+    required this.fireStoreAuth,
+    required this.friendEmail,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: fireStoreAuth
+            .collection('users')
+            .doc(userLogIn.email)
+            .collection('conversations')
+            .doc(friendEmail)
+            .collection('messages')
+            .orderBy('msg_date')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final messages = snapshot.data!.docs;
+          List<BubbleTextBuilder> messageBubbles = [];
+          for (var message in messages) {
+            final messageData = message;
+            print(messageData['message']);
+            print(messageData['sender']);
+            final messageBubble = BubbleTextBuilder(
+              message: messageData['message'],
+              email: messageData['sender'],
+              isSelfSender: userLogIn.email == messageData['sender'],
+            );
+            messageBubbles.add(messageBubble);
+          }
+          return Expanded(
+            child: ListView(
+              reverse: true,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+              children: messageBubbles,
+            ),
+          );
+        });
   }
 }
 
@@ -122,60 +201,19 @@ class BubbleTextBuilder extends StatelessWidget {
                     topRight: const Radius.circular(28)),
             color: isSelfSender ? Colors.indigoAccent : Colors.white,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Text(
                 message,
-                style: TextStyle(
-                    fontSize: 16.0,
-                    color: isSelfSender ? Colors.white : Colors.black),
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 15.0,
+                ),
               ),
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class StreamMessagesBuilder extends StatelessWidget {
-  const StreamMessagesBuilder({
-    Key? key,
-    required FirebaseFirestore fireStoreAuth,
-  })  : _fireStoreAuth = fireStoreAuth,
-        super(key: key);
-
-  final FirebaseFirestore _fireStoreAuth;
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: _fireStoreAuth.collection("conversations").snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final conversations = snapshot.data!.docs.reversed;
-          List<BubbleTextBuilder> conversationWidget = [];
-          for (var text in conversations) {
-            final textMessage = text["sent_message"];
-            final senderMail = text["user_mail"];
-            final loggedInCurrentUser = userLogIn.email;
-            final bubbleTextWidget = BubbleTextBuilder(
-                isSelfSender: loggedInCurrentUser == senderMail,
-                email: senderMail,
-                message: textMessage);
-            conversationWidget.add(bubbleTextWidget);
-          }
-          return Expanded(
-              child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            children: conversationWidget,
-          ));
-        }
-        return const Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.blue,
-          ),
-        );
-      },
     );
   }
 }

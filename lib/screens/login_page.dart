@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iau_chat/helpers/main_button.dart';
 import 'package:iau_chat/helpers/style_utils.dart';
+import 'package:iau_chat/screens/main_chat_page.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 import '../helpers/footnote.dart';
@@ -79,7 +80,7 @@ class LogInScreenState extends State<LogInScreen> {
                         await _fireBaseAuth.signInWithEmailAndPassword(
                             email: userEmail, password: userPassword);
                     if (logUser != null) {
-                      Navigator.pushNamed(context, ChattingScreen.route);
+                      Navigator.pushNamed(context, HomeScreen.route);
                     }
                   } on Exception catch (e) {
                     print(e);

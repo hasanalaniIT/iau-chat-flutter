@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:iau_chat/screens/main_chat_page.dart';
 import 'package:iau_chat/screens/main_page.dart';
 import 'package:iau_chat/screens/login_page.dart';
 import 'package:iau_chat/screens/signup_page.dart';
@@ -23,7 +24,8 @@ class MyChat extends StatelessWidget {
         MainScreen.route: (context) => const MainScreen(),
         LogInScreen.route: (context) => const LogInScreen(),
         SignUpScreen.route: (context) => const SignUpScreen(),
-        ChattingScreen.route: (context) => const ChattingScreen(),
+        HomeScreen.route: (context) => const HomeScreen(),
+        // ChattingScreen.route: (context) => const ChattingScreen(selectedFriendEmail: 'redfire5005@gmail.com',),
       },
     );
   }

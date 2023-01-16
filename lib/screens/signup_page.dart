@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:iau_chat/helpers/main_button.dart';
 import 'package:iau_chat/helpers/style_utils.dart';
@@ -6,6 +7,7 @@ import 'package:iau_chat/screens/chatting_page.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 import '../helpers/footnote.dart';
+import 'main_chat_page.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -69,17 +71,18 @@ class SignUpScreenState extends State<SignUpScreen> {
               MainButton(
                 text: 'Register',
                 onPressed: () async {
-                  setState(() {
-                    loadingCircle = true;
-                  });
-                  print(userPassword);
-                  print(userEmail);
                   try {
+                    print(userPassword);
+                    print(userEmail);
                     final newRegister =
                         await _fireBaseAuth.createUserWithEmailAndPassword(
                             email: userEmail, password: userPassword);
                     if (newRegister != null) {
-                      Navigator.pushNamed(context, ChattingScreen.route);
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(newRegister.user?.uid)
+                          .set({'email': userEmail});
+                      Navigator.pushNamed(context, HomeScreen.route);
                     }
                   } on Exception catch (e) {
                     print(e);
