@@ -95,6 +95,7 @@ class SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: const MyFootNote(),
     );
   }
 }
