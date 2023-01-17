@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:iau_chat/helpers/main_button.dart';
 import 'package:iau_chat/helpers/style_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:iau_chat/screens/chatting_page.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 import '../helpers/footnote.dart';
@@ -82,7 +81,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                           .collection('users')
                           .doc(newRegister.user?.uid)
                           .set({'email': userEmail});
-                      Navigator.pushNamed(context, HomeScreen.route);
+                      Navigator.pushNamed(context, ChatHomeScreen.route);
                     }
                   } on Exception catch (e) {
                     print(e);
@@ -98,6 +97,7 @@ class SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: const MyFootNote(),
     );
   }
 }
