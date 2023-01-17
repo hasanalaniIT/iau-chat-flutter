@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:iau_chat/screens/main_chat_page.dart';
 import 'package:iau_chat/screens/main_page.dart';
 import 'package:iau_chat/screens/login_page.dart';
 import 'package:iau_chat/screens/signup_page.dart';
@@ -18,12 +19,12 @@ class MyChat extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: MainScreen.route ,
+      initialRoute: MainScreen.route,
       routes: {
         MainScreen.route: (context) => const MainScreen(),
         LogInScreen.route: (context) => const LogInScreen(),
         SignUpScreen.route: (context) => const SignUpScreen(),
-        ChattingScreen.route: (context) => const ChattingScreen(),
+        ChatHomeScreen.route: (context) => const ChatHomeScreen(),
       },
     );
   }

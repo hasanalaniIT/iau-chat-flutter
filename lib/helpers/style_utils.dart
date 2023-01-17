@@ -6,8 +6,7 @@ const mySendButtonTextStyle = TextStyle(
   fontSize: 18.0,
 );
 const myBubbleMessageRadiusDecoration = BorderRadius.only(
-    bottomRight: Radius.circular(28),
-    bottomLeft: Radius.circular(28));
+    bottomRight: Radius.circular(28), bottomLeft: Radius.circular(28));
 
 const myMessageTextFieldDecoration = InputDecoration(
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -21,18 +20,17 @@ const myMessageContainerDecoration = BoxDecoration(
   ),
 );
 const myTextFieldDecoration = InputDecoration(
-hintText: 'Enter information',
-contentPadding:
-EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-border: OutlineInputBorder(
-borderRadius: BorderRadius.all(Radius.circular(32.0)),
-),
-enabledBorder: OutlineInputBorder(
-borderSide: BorderSide(color: Colors.blue, width: 1.0),
-borderRadius: BorderRadius.all(Radius.circular(32.0)),
-),
-focusedBorder: OutlineInputBorder(
-borderSide: BorderSide(color: Colors.indigoAccent, width: 2.0),
-borderRadius: BorderRadius.all(Radius.circular(32.0)),
-),
+  hintText: 'Enter information',
+  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+  ),
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.blue, width: 1.0),
+    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.indigoAccent, width: 2.0),
+    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+  ),
 );
