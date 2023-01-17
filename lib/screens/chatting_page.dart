@@ -26,18 +26,6 @@ class ChattingScreenState extends State<ChattingScreen> {
     super.initState();
   }
 
-  void getUser() async {
-    try {
-      final currUser = _fireBaseAuth.currentUser;
-      if (currUser != null) {
-        userLogIn = currUser;
-        print(userLogIn.email);
-      }
-    } on Exception catch (e) {
-      print(e);
-    }
-  }
-
   void createConversation(String friendEmail) async {
     final currUser = _fireBaseAuth.currentUser;
     if (currUser != null) {
@@ -83,58 +71,72 @@ class ChattingScreenState extends State<ChattingScreen> {
     }
   }
 
+  void getUser() async {
+    try {
+      final currUser = _fireBaseAuth.currentUser;
+      if (currUser != null) {
+        userLogIn = currUser;
+        print(userLogIn.email);
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: null,
-        actions: <Widget>[
-          IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () {
-                _fireBaseAuth.signOut();
-                Navigator.pushNamed(context, LogInScreen.route);
-              }),
-        ],
-        title: Text(widget.selectedFriendEmail),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            StreamMessagesBuilder(
-                fireStoreAuth: _fireStoreAuth,
-                friendEmail: widget.selectedFriendEmail),
-            Container(
-              decoration: myMessageContainerDecoration,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      controller: textFieldController,
-                      onChanged: (text) {
-                        textMessage = text;
-                      },
-                      decoration: myMessageTextFieldDecoration,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      textFieldController.clear();
-                      createConversation(widget.selectedFriendEmail);
-                    },
-                    child: const Text(
-                      'Send',
-                      style: mySendButtonTextStyle,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+    return Container(
+      child: Scaffold(
+        appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+                icon: const Icon(Icons.logout),
+                onPressed: () {
+                  _fireBaseAuth.signOut();
+                  Navigator.pushNamedAndRemoveUntil(context, LogInScreen.route,
+                      (Route<dynamic> route) => false);
+                }),
           ],
+          title: Text(widget.selectedFriendEmail,style: const TextStyle(fontSize: 24),),
+          backgroundColor: Colors.indigoAccent[400],
+        ),
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              StreamMessagesBuilder(
+                  fireStoreAuth: _fireStoreAuth,
+                  friendEmail: widget.selectedFriendEmail),
+              Container(
+                decoration: myMessageContainerDecoration,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        controller: textFieldController,
+                        onChanged: (text) {
+                          textMessage = text;
+                        },
+                        decoration: myMessageTextFieldDecoration,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        textFieldController.clear();
+                        createConversation(widget.selectedFriendEmail);
+                      },
+                      child: const Text(
+                        'Send',
+                        style: mySendButtonTextStyle,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -186,7 +188,7 @@ class StreamMessagesBuilder extends StatelessWidget {
                   );
                 }
                 final messages = snapshot.data!.docs.reversed;
-                List<BubbleTextBuilder> messageBubbles = [];
+                List<BubbleTextBuilder> bubblesChatList = [];
                 for (var message in messages) {
                   final messageData = message;
                   final messageBubble = BubbleTextBuilder(
@@ -194,14 +196,14 @@ class StreamMessagesBuilder extends StatelessWidget {
                     email: messageData['sender'],
                     isSelfSender: userLogIn.email == messageData['sender'],
                   );
-                  messageBubbles.add(messageBubble);
+                  bubblesChatList.add(messageBubble);
                 }
                 return Expanded(
                   child: ListView(
                     reverse: true,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10.0, vertical: 20.0),
-                    children: messageBubbles,
+                    children: bubblesChatList,
                   ),
                 );
               });
@@ -217,37 +219,39 @@ class BubbleTextBuilder extends StatelessWidget {
       {required this.message, required this.email, required this.isSelfSender});
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment:
-            isSelfSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Text(
-            email,
-            style: const TextStyle(fontSize: 13, color: Colors.black45),
-          ),
-          Material(
-            elevation: 6.0,
-            borderRadius: isSelfSender
-                ? myBubbleMessageRadiusDecoration.copyWith(
-                    topLeft: const Radius.circular(28))
-                : myBubbleMessageRadiusDecoration.copyWith(
-                    topRight: const Radius.circular(28)),
-            color: isSelfSender ? Colors.indigoAccent : Colors.white,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-              child: Text(
-                message,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 15.0,
+    return Container(
+      child: Padding(
+        child: Column(
+          crossAxisAlignment:
+              isSelfSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            Text(
+              email,
+              style: const TextStyle(fontSize: 13, color: Colors.black45),
+            ),
+            Material(
+              elevation: 6.0,
+              borderRadius: isSelfSender
+                  ? myBubbleMessageRadiusDecoration.copyWith(
+                      topLeft: const Radius.circular(28))
+                  : myBubbleMessageRadiusDecoration.copyWith(
+                      topRight: const Radius.circular(28)),
+              color: isSelfSender ? Colors.indigoAccent : Colors.white,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                child: Text(
+                  message,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15.0,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+        padding: const EdgeInsets.all(10.0),
       ),
     );
   }
