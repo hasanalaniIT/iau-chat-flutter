@@ -6,7 +6,6 @@ import 'package:iau_chat/screens/main_chat_page.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 
 import '../helpers/footnote.dart';
-import 'chatting_page.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -80,7 +79,7 @@ class LogInScreenState extends State<LogInScreen> {
                         await _fireBaseAuth.signInWithEmailAndPassword(
                             email: userEmail, password: userPassword);
                     if (logUser != null) {
-                      Navigator.pushNamed(context, HomeScreen.route);
+                      Navigator.pushNamed(context, ChatHomeScreen.route);
                     }
                   } on Exception catch (e) {
                     print(e);

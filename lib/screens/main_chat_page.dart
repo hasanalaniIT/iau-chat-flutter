@@ -1,26 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../helpers/footnote.dart';
 import 'chatting_page.dart';
 
-class HomeScreen extends StatefulWidget {
-
+class ChatHomeScreen extends StatefulWidget {
   static const route = "main_chat_page";
 
-  const HomeScreen({super.key});
+  const ChatHomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _ChatHomeScreenState createState() => _ChatHomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ChatHomeScreenState extends State<ChatHomeScreen> {
   final _fireStore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Home'),
+          title: const Text('Chats'),
         ),
         body: StreamBuilder<QuerySnapshot>(
             stream: _fireStore.collection('users').snapshots(),
@@ -40,7 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChattingScreen(selectedFriendEmail: userData['email']),
+                        builder: (context) => ChattingScreen(
+                            selectedFriendEmail: userData['email']),
                       ),
                     );
                   },
@@ -49,7 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
               return ListView(
                 children: userTiles,
               );
-            }));
+            }
+            )
+        ,bottomNavigationBar: const MyFootNote(),
+    );
   }
 }
-

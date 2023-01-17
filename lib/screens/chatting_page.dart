@@ -2,6 +2,7 @@ import 'package:iau_chat/helpers/style_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'login_page.dart';
 
 late User userLogIn;
 
@@ -37,18 +38,15 @@ class ChattingScreenState extends State<ChattingScreen> {
     }
   }
 
-
   void createConversation(String friendEmail) async {
     final currUser = _fireBaseAuth.currentUser;
     if (currUser != null) {
-      final userDoc = await _fireStoreAuth
-          .collection('users')
-          .doc(currUser.uid)
-          .get();
-      print(userDoc.id);
-      print("userDoc");
+      // create conversation for current user
+      final userDoc =
+          await _fireStoreAuth.collection('users').doc(currUser.uid).get();
       if (userDoc.exists) {
-        final conversation = userDoc.reference.collection('conversations').doc();
+        final conversation =
+            userDoc.reference.collection('conversations').doc(friendEmail);
         conversation.set({
           "friend_email": friendEmail,
           "timestamp": Timestamp.now(),
@@ -61,9 +59,29 @@ class ChattingScreenState extends State<ChattingScreen> {
       } else {
         print('User document does not exist');
       }
+      // create conversation for friend user
+      final friendDoc = await _fireStoreAuth
+          .collection('users')
+          .where('email', isEqualTo: friendEmail)
+          .get();
+      if (friendDoc.docs.isNotEmpty) {
+        final friendConversation = friendDoc.docs.first.reference
+            .collection('conversations')
+            .doc(currUser.email);
+        friendConversation.set({
+          "friend_email": currUser.email,
+          "timestamp": Timestamp.now(),
+        });
+        friendConversation.collection('messages').add({
+          "message": textMessage,
+          "msg_date": Timestamp.now(),
+          "sender": currUser.email,
+        });
+      } else {
+        print('Friend document does not exist');
+      }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +93,10 @@ class ChattingScreenState extends State<ChattingScreen> {
               icon: const Icon(Icons.logout),
               onPressed: () {
                 _fireBaseAuth.signOut();
-                Navigator.pop(context);
+                Navigator.pushNamed(context, LogInScreen.route);
               }),
         ],
-        title: const Text('Chat'),
+        title: Text(widget.selectedFriendEmail),
         backgroundColor: Colors.blueAccent,
       ),
       body: SafeArea(
@@ -137,11 +155,9 @@ class StreamMessagesBuilder extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
         stream: fireStoreAuth
             .collection('users')
-            .doc(userLogIn.email)
+            .doc(userLogIn.uid)
             .collection('conversations')
-            .doc(friendEmail)
-            .collection('messages')
-            .orderBy('msg_date')
+            .where("friend_email", isEqualTo: friendEmail)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -149,27 +165,46 @@ class StreamMessagesBuilder extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          final messages = snapshot.data!.docs;
-          List<BubbleTextBuilder> messageBubbles = [];
-          for (var message in messages) {
-            final messageData = message;
-            print(messageData['message']);
-            print(messageData['sender']);
-            final messageBubble = BubbleTextBuilder(
-              message: messageData['message'],
-              email: messageData['sender'],
-              isSelfSender: userLogIn.email == messageData['sender'],
+          final conversations = snapshot.data!.docs.reversed;
+          if (conversations.isEmpty) {
+            return const Text(
+              "Sey hello ♡",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w100),
+              textAlign: TextAlign.center,
             );
-            messageBubbles.add(messageBubble);
           }
-          return Expanded(
-            child: ListView(
-              reverse: true,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-              children: messageBubbles,
-            ),
-          );
+          final conversation = conversations.first;
+          return StreamBuilder<QuerySnapshot>(
+              stream: conversation.reference
+                  .collection('messages')
+                  .orderBy('msg_date')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                final messages = snapshot.data!.docs.reversed;
+                List<BubbleTextBuilder> messageBubbles = [];
+                for (var message in messages) {
+                  final messageData = message;
+                  final messageBubble = BubbleTextBuilder(
+                    message: messageData['message'],
+                    email: messageData['sender'],
+                    isSelfSender: userLogIn.email == messageData['sender'],
+                  );
+                  messageBubbles.add(messageBubble);
+                }
+                return Expanded(
+                  child: ListView(
+                    reverse: true,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 20.0),
+                    children: messageBubbles,
+                  ),
+                );
+              });
         });
   }
 }

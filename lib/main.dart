@@ -19,13 +19,12 @@ class MyChat extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: MainScreen.route ,
+      initialRoute: MainScreen.route,
       routes: {
         MainScreen.route: (context) => const MainScreen(),
         LogInScreen.route: (context) => const LogInScreen(),
         SignUpScreen.route: (context) => const SignUpScreen(),
-        HomeScreen.route: (context) => const HomeScreen(),
-        // ChattingScreen.route: (context) => const ChattingScreen(selectedFriendEmail: 'redfire5005@gmail.com',),
+        ChatHomeScreen.route: (context) => const ChatHomeScreen(),
       },
     );
   }
